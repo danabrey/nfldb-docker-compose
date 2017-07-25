@@ -1,0 +1,24 @@
+version: "3"
+services:
+  nfldb:
+    build: nfldb
+    volumes:
+      - ./scripts:/scripts
+      - ./videos:/videos
+    environment:
+      NFLVID_FOOTAGE_PLAY_DIR: /videos
+  nfldb-updater:
+    build: nfldb-updater
+    environment:
+      PGPASSWORD: passw0rd
+    depends_on:
+      - db
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: passw0rd
+      POSTGRES_USER: nfldb
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
